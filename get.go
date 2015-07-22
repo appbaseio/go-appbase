@@ -1,21 +1,14 @@
-// Copyright 2012-2015 Oliver Eilhard. All rights reserved.
-// Use of this source code is governed by a MIT-license.
-// See http://olivere.mit-license.org/license.txt for details.
-
-package elastic
+package appbase
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/url"
 	"strings"
-
-	"github.com/olivere/elastic/uritemplates"
 )
 
 type GetService struct {
 	client                        *Client
-	index                         string
 	typ                           string
 	id                            string
 	routing                       string
@@ -29,25 +22,12 @@ type GetService struct {
 	ignoreErrorsOnGeneratedFields *bool
 }
 
-func NewGetService(client *Client) *GetService {
+func newGetService(client *Client) *GetService {
 	builder := &GetService{
 		client: client,
 		typ:    "_all",
 	}
 	return builder
-}
-
-func (b *GetService) String() string {
-	return fmt.Sprintf("[%v][%v][%v]: routing [%v]",
-		b.index,
-		b.typ,
-		b.id,
-		b.routing)
-}
-
-func (b *GetService) Index(index string) *GetService {
-	b.index = index
-	return b
 }
 
 func (b *GetService) Type(typ string) *GetService {
@@ -130,9 +110,6 @@ func (s *GetService) Validate() error {
 	if s.id == "" {
 		invalid = append(invalid, "Id")
 	}
-	if s.index == "" {
-		invalid = append(invalid, "Index")
-	}
 	if s.typ == "" {
 		invalid = append(invalid, "Type")
 	}
@@ -142,21 +119,13 @@ func (s *GetService) Validate() error {
 	return nil
 }
 
-func (b *GetService) Do() (*GetResult, chan *json.RawMessage, chan error, error) {
+func (b *GetService) Do() (initialResponse *json.RawMessage, responseStream chan *json.RawMessage, errorStream chan error, err error) {
 	// Check pre-conditions
 	if err := b.Validate(); err != nil {
 		return nil, nil, nil, err
 	}
 
-	// Build url
-	path, err := uritemplates.Expand("/{index}/{type}/{id}", map[string]string{
-		"index": b.index,
-		"type":  b.typ,
-		"id":    b.id,
-	})
-	if err != nil {
-		return nil, nil, nil, err
-	}
+	path := fmt.Sprintf("%s/%s", b.typ, b.id)
 
 	params := make(url.Values)
 	if b.realtime != nil {
@@ -195,35 +164,7 @@ func (b *GetService) Do() (*GetResult, chan *json.RawMessage, chan error, error)
 		}
 	}
 
-	// Make the request stream
 	params.Add("stream", "true")
 
-	responseChannel := make(chan *json.RawMessage)
-	errorChannel := make(chan error)
-
-	// Get response
-	res, err := b.client.PerformStreamingRequest("GET", path, params, nil, responseChannel, errorChannel)
-	if err != nil {
-		return nil, nil, nil, err
-	}
-
-	// Return result
-	ret := new(GetResult)
-	if err := json.Unmarshal(res.Body, ret); err != nil {
-		return nil, nil, nil, err
-	}
-	return ret, responseChannel, errorChannel, nil
-}
-
-// -- Result of a get request.
-
-type GetResult struct {
-	Index   string                 `json:"_index"`
-	Type    string                 `json:"_type"`
-	Id      string                 `json:"_id"`
-	Version int64                  `json:"_version,omitempty"`
-	Source  *json.RawMessage       `json:"_source,omitempty"`
-	Found   bool                   `json:"found,omitempty"`
-	Fields  map[string]interface{} `json:"fields,omitempty"`
-	Error   string                 `json:"error,omitempty"` // used only in MultiGet
+	return b.client.PerformStreamingRequest("GET", path, params, "")
 }
