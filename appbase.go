@@ -43,6 +43,10 @@ func (c *Client) StreamDocument() *GetService {
 	return newGetService(c)
 }
 
+func (c *Client) StreamSearch() *SearchService {
+	return newSearchService(c)
+}
+
 func (c *Client) Ping() error {
 	req, err := http.NewRequest("HEAD", c.url, nil)
 	if err != nil {

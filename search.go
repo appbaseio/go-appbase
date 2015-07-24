@@ -19,7 +19,7 @@ type SearchService struct {
 // NewSearchService creates a new service for searching in Elasticsearch.
 // You typically do not create the service yourself manually, but access
 // it via client.Search().
-func NewSearchService(client *Client) *SearchService {
+func newSearchService(client *Client) *SearchService {
 	builder := &SearchService{
 		client: client,
 	}
