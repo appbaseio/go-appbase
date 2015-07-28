@@ -43,7 +43,7 @@ func TestStreamDocument(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if string(e) != `{"_index":"testindex","_type":"tweet","_id":"1","_source":{"message":"Welcome to Golang and Elasticsearch.","user":"olivere"}}` {
+		if string(e) != `{"_type":"tweet","_id":"1","_source":{"message":"Welcome to Golang and Elasticsearch.","user":"olivere"}}` {
 			t.Error("event was not as expected: ", string(e))
 		}
 		break

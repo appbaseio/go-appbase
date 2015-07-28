@@ -11,7 +11,6 @@ type GetService struct {
 	client                        *Client
 	typ                           string
 	id                            string
-	routing                       string
 	preference                    string
 	fields                        []string
 	refresh                       *bool
@@ -37,18 +36,6 @@ func (b *GetService) Type(typ string) *GetService {
 
 func (b *GetService) Id(id string) *GetService {
 	b.id = id
-	return b
-}
-
-func (b *GetService) Parent(parent string) *GetService {
-	if b.routing == "" {
-		b.routing = parent
-	}
-	return b
-}
-
-func (b *GetService) Routing(routing string) *GetService {
-	b.routing = routing
 	return b
 }
 
@@ -133,9 +120,6 @@ func (b *GetService) Do() (initialResponse *json.RawMessage, responseStream chan
 	}
 	if len(b.fields) > 0 {
 		params.Add("fields", strings.Join(b.fields, ","))
-	}
-	if b.routing != "" {
-		params.Add("routing", b.routing)
 	}
 	if b.preference != "" {
 		params.Add("preference", b.preference)
