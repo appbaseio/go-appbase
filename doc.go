@@ -1,0 +1,8 @@
+package appbase
+
+// go-appbase is a data streams library for Go;
+// compatible with elasticsearch.
+//
+// To use the data streaming facilities of the library, create an account at https://appbase.io/
+//
+// Checkout the examples to learn more.
