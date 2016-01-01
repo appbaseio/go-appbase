@@ -11,9 +11,14 @@ const appname string = "testapp2"
 
 const testtype string = "tweet"
 const tweet1 string = `{"user":"sacheendra","message":"I am a robot."}`
+const tweet2 string = `{"user":"sacheendra","message":"I am not a robot."}`
+const query1 string = `{"query":{"match_all":{}}}`
+
+var client *Client
 
 func TestAppbase(t *testing.T) {
-	client, err := NewClient(URL, username, password, appname)
+	var err error
+	client, err = NewClient(URL, username, password, appname)
 	if err != nil {
 		t.Error(err)
 		return

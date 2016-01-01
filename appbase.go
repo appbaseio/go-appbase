@@ -22,6 +22,10 @@ func NewClient(URL string, username string, password string, appname string) (*C
 	return client, nil
 }
 
+func (c *Client) Ping() error {
+	return c.conn.Ping()
+}
+
 func (c *Client) Index() *actions.IndexService {
 	return actions.NewIndexService(c.conn)
 }
