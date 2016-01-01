@@ -9,7 +9,6 @@ import (
 )
 
 type SearchStreamResponse struct {
-	SearchResponse
 	responseDecoder *json.Decoder
 }
 
@@ -61,24 +60,15 @@ func (s *SearchStreamService) Do() (*SearchStreamResponse, error) {
 		s.options.Params = make(url.Values)
 	}
 
-	streamonly := s.options.Params.Get("streamonly") == "true"
-	if !streamonly {
-		s.options.Params.Set("stream", "true")
-	}
+	s.options.Params.Del("stream")
+	s.options.Params.Set("streamonly", "true")
 
 	responseDecoder, err := s.conn.PerformRequest("POST", strings.Join([]string{s.options.Type, "_search"}, "/"), s.options.Params, s.options.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	searchStreamResponse := &SearchStreamResponse{}
-	if !streamonly {
-		err = responseDecoder.Decode(searchStreamResponse)
-		if err != nil {
-			return nil, err
-		}
-	}
-	searchStreamResponse.responseDecoder = responseDecoder
+	searchStreamResponse := &SearchStreamResponse{responseDecoder}
 
 	return searchStreamResponse, nil
 }

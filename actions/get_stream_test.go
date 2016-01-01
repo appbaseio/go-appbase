@@ -20,10 +20,6 @@ func GetStreamServiceTest(t *testing.T, client *elastic.Client, conn *connection
 		t.Error(err)
 		return
 	}
-	if !res.Found {
-		t.Error("Document not found")
-		return
-	}
 
 	_, err = client.Index().Index(appname).Type(testtype).Id("1").BodyString(tweet1).Do()
 	if err != nil {

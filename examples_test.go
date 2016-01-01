@@ -3,7 +3,6 @@ package appbase
 import (
 	"fmt"
 	"log"
-	"net/url"
 )
 
 func Example() {
@@ -57,32 +56,6 @@ func ExampleClient_Search() {
 
 func ExampleClient_SearchStream() {
 	searchStreamResponse, err := client.SearchStream().Type(testtype).Body(query1).Do()
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-
-	_, err = client.Index().Type(testtype).Id("1").Body(tweet2).Do()
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-
-	docResponse, err := searchStreamResponse.Next()
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-
-	fmt.Println(docResponse.Id)
-	// Output:
-	// 1
-}
-
-func ExampleClient_SearchStream_streamonly() {
-	params := make(url.Values)
-	params.Set("streamonly", "true")
-	searchStreamResponse, err := client.SearchStream().Type(testtype).URLParams(params).Body(query1).Do()
 	if err != nil {
 		log.Fatalln(err)
 		return

@@ -9,7 +9,6 @@ import (
 )
 
 type GetStreamResponse struct {
-	GetResponse
 	responseDecoder *json.Decoder
 }
 
@@ -61,24 +60,15 @@ func (g *GetStreamService) Do() (*GetStreamResponse, error) {
 		g.options.Params = make(url.Values)
 	}
 
-	streamonly := g.options.Params.Get("streamonly") == "true"
-	if !streamonly {
-		g.options.Params.Set("stream", "true")
-	}
+	g.options.Params.Del("stream")
+	g.options.Params.Set("streamonly", "true")
 
 	responseDecoder, err := g.conn.PerformRequest("GET", strings.Join([]string{g.options.Type, g.options.Id}, "/"), g.options.Params, "")
 	if err != nil {
 		return nil, err
 	}
 
-	getStreamResponse := &GetStreamResponse{}
-	if !streamonly {
-		err = responseDecoder.Decode(getStreamResponse)
-		if err != nil {
-			return nil, err
-		}
-	}
-	getStreamResponse.responseDecoder = responseDecoder
+	getStreamResponse := &GetStreamResponse{responseDecoder}
 
 	return getStreamResponse, nil
 }

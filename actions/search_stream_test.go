@@ -20,10 +20,6 @@ func SearchStreamServiceTest(t *testing.T, client *elastic.Client, conn *connect
 		t.Error(err)
 		return
 	}
-	if res.Hits.TotalHits == 0 {
-		t.Error("No hits found")
-		return
-	}
 
 	_, err = client.Index().Index(appname).Type(testtype).Id("1").BodyString(tweet1).Do()
 	if err != nil {
