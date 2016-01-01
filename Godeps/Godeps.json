@@ -1,0 +1,14 @@
+{
+	"ImportPath": "github.com/sacheendra/go-appbase",
+	"GoVersion": "go1.4",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "gopkg.in/olivere/elastic.v3",
+			"Comment": "v3.0.16",
+			"Rev": "0f746c80e6b90e0e1febfe9330f3f07071020cce"
+		}
+	]
+}
