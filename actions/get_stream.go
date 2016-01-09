@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/sacheendra/go-appbase/connection"
+	"github.com/appbaseio/go-appbase/connection"
 )
 
 type GetStreamResponse struct {

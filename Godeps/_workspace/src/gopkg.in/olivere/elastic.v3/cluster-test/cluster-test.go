@@ -17,7 +17,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/sacheendra/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3"
+	"github.com/appbaseio/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3"
 )
 
 type Tweet struct {

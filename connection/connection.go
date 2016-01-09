@@ -1,12 +1,16 @@
 package connection
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+
+	appbase_error "github.com/appbaseio/go-appbase/error"
 )
 
 type Connection struct {
@@ -70,7 +74,26 @@ func (c *Connection) PerformRequest(method string, path string, params url.Value
 		return nil, err
 	}
 
-	responseDecoder = json.NewDecoder(res.Body)
+	if res.Close {
+		res_body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		var appb_err appbase_error.AppbaseError
+		err = json.Unmarshal(res_body, &appb_err)
+		if err != nil {
+			return nil, errors.New(fmt.Sprint(err.Error(), string(res_body)))
+		}
+
+		if appb_err.Status >= 300 {
+			return nil, &appb_err
+		}
+
+		responseDecoder = json.NewDecoder(bytes.NewBuffer(res_body))
+	} else {
+		responseDecoder = json.NewDecoder(res.Body)
+	}
 
 	return responseDecoder, nil
 }

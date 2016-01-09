@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/sacheendra/go-appbase/connection"
+	"github.com/appbaseio/go-appbase/connection"
 
-	"github.com/sacheendra/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3"
+	"github.com/appbaseio/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3"
 )
 
 func UpdateServiceTest(t *testing.T, client *elastic.Client, conn *connection.Connection) {

@@ -4,9 +4,9 @@ import (
 	"log"
 	"testing"
 
-	"github.com/sacheendra/go-appbase/connection"
+	"github.com/appbaseio/go-appbase/connection"
 
-	"github.com/sacheendra/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3"
+	"github.com/appbaseio/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3"
 )
 
 const URL string = "https://scalr.api.appbase.io"
@@ -42,4 +42,6 @@ func TestActions(t *testing.T) {
 	IndexServiceTest(t, client, conn)
 	UpdateServiceTest(t, client, conn)
 	SearchServiceTest(t, client, conn)
+	SearchStreamServiceTest(t, client, conn)
+	//SearchStreamToURLServiceTest(t, client, conn)
 }

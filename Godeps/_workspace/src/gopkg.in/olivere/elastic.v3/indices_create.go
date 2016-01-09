@@ -9,7 +9,7 @@ import (
 	"errors"
 	"net/url"
 
-	"github.com/sacheendra/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3/uritemplates"
+	"github.com/appbaseio/go-appbase/Godeps/_workspace/src/gopkg.in/olivere/elastic.v3/uritemplates"
 )
 
 // IndicesCreateService creates a new index.

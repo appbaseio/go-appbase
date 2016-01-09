@@ -1,8 +1,8 @@
 package appbase
 
 import (
-	"github.com/sacheendra/go-appbase/actions"
-	"github.com/sacheendra/go-appbase/connection"
+	"github.com/appbaseio/go-appbase/actions"
+	"github.com/appbaseio/go-appbase/connection"
 )
 
 type Client struct {

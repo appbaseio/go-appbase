@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/sacheendra/go-appbase",
+	"ImportPath": "github.com/appbaseio/go-appbase",
 	"GoVersion": "go1.4",
 	"Packages": [
 		"./..."
