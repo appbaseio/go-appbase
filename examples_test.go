@@ -6,7 +6,7 @@ import (
 )
 
 func Example() {
-	client, _ := NewClient("https://scalr.api.appbase.io", "dW9DQYdot", "40d5db8b-36c8-41ac-b6e9-d26d7e34ce1e", "testapp2")
+	client, _ := NewClient("https://scalr.api.appbase.io", "QEVrcElba", "5c13d943-a5d1-4b05-92f3-42707d49fcbb", "es2test1")
 
 	err := client.Ping()
 	if err != nil {
@@ -19,7 +19,7 @@ func Example() {
 }
 
 func ExampleClient_Index() {
-	res, err := client.Index().Type(testtype).Id("1").Body(tweet1).Do()
+	res, err := client.Index().Type(testtype).Id("3").Body(tweet1).Do()
 	if err != nil {
 		log.Fatalln(err)
 		return
@@ -27,11 +27,11 @@ func ExampleClient_Index() {
 
 	fmt.Println(res.Id)
 	// Output:
-	// 1
+	// 3
 }
 
 func ExampleClient_Update() {
-	res, err := client.Update().Type(testtype).Id("1").Body(fmt.Sprintf(`{ "doc": %s }`, tweet2)).Do()
+	res, err := client.Update().Type(testtype).Id("3").Body(fmt.Sprintf(`{ "doc": %s }`, tweet2)).Do()
 	if err != nil {
 		log.Fatalln(err)
 		return
@@ -39,7 +39,7 @@ func ExampleClient_Update() {
 
 	fmt.Println(res.Id)
 	// Output:
-	// 1
+	// 3
 }
 
 func ExampleClient_Search() {
@@ -61,7 +61,7 @@ func ExampleClient_SearchStream() {
 		return
 	}
 
-	_, err = client.Index().Type(testtype).Id("1").Body(tweet2).Do()
+	_, err = client.Index().Type(testtype).Id("3").Body(tweet2).Do()
 	if err != nil {
 		log.Fatalln(err)
 		return
@@ -75,5 +75,26 @@ func ExampleClient_SearchStream() {
 
 	fmt.Println(docResponse.Id)
 	// Output:
-	// 1
+	// 3
+}
+
+func ExampleClient_SearchStreamToURL() {
+	webhook := NewWebhook()
+	webhook.URL = "http://requestb.in/whm9cvwh"
+	webhook.Method = "POST"
+	searchStreamToURLResponse, err := client.SearchStreamToURL().Type(testtype).Query(query1).AddWebhook(webhook).Do()
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+
+	stopSearchStream, err := searchStreamToURLResponse.Stop()
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+
+	fmt.Println(searchStreamToURLResponse.Id == stopSearchStream.Id)
+	// Output:
+	// true
 }

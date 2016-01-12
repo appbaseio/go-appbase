@@ -5,11 +5,11 @@ import (
 )
 
 const URL string = "https://scalr.api.appbase.io"
-const username string = "dW9DQYdot"
-const password string = "40d5db8b-36c8-41ac-b6e9-d26d7e34ce1e"
-const appname string = "testapp2"
+const username string = "QEVrcElba"
+const password string = "5c13d943-a5d1-4b05-92f3-42707d49fcbb"
+const appname string = "es2test1"
 
-const testtype string = "tweet"
+const testtype string = "tweet2"
 const tweet1 string = `{"user":"sacheendra","message":"I am a robot."}`
 const tweet2 string = `{"user":"sacheendra","message":"I am not a robot."}`
 const query1 string = `{"query":{"match_all":{}}}`
@@ -24,13 +24,13 @@ func TestAppbase(t *testing.T) {
 		return
 	}
 
-	_, err = client.Index().Type(testtype).Id("1").Body(tweet1).Do()
+	_, err = client.Index().Type(testtype).Id("2").Body(tweet1).Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	res, err := client.Delete().Type(testtype).Id("1").Do()
+	res, err := client.Delete().Type(testtype).Id("2").Do()
 	if err != nil {
 		t.Error(err)
 		return

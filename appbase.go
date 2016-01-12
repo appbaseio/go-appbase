@@ -60,3 +60,12 @@ func (c *Client) Search() *actions.SearchService {
 func (c *Client) SearchStream() *actions.SearchStreamService {
 	return actions.NewSearchStreamService(c.conn)
 }
+
+// SearchStream is used to send updates corresponding to a query to an URL
+func (c *Client) SearchStreamToURL() *actions.SearchStreamToURLService {
+	return actions.NewSearchStreamToURLService(c.conn)
+}
+
+func NewWebhook() *actions.Webhook {
+	return &actions.Webhook{}
+}

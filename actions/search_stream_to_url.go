@@ -9,9 +9,17 @@ import (
 	"github.com/appbaseio/go-appbase/connection"
 )
 
+type Webhook struct {
+	URL      string `json:"url,omitempty" validate:"required"`
+	Method   string `json:"method,omitempty" validate:"required"`
+	Body     string `json:"body, omitempty"`
+	Interval int    `json:"body,omitempty"`
+	Count    int    `json:"body,omitempty"`
+}
+
 type SearchStreamToURLOptions struct {
 	Type     string           `json:"type" validate:"required"`
-	Webhooks []*Webhook       `json:"webhooks" validate:"required"`
+	Webhooks []interface{}    `json:"webhooks" validate:"required"`
 	Query    *json.RawMessage `json:"query" validate:"required"`
 	query    string
 }
@@ -45,7 +53,7 @@ type SearchStreamToURLService struct {
 func NewSearchStreamToURLService(conn *connection.Connection) *SearchStreamToURLService {
 	return &SearchStreamToURLService{
 		conn:    conn,
-		options: &SearchStreamToURLOptions{Webhooks: make([]*Webhook, 0)},
+		options: &SearchStreamToURLOptions{Webhooks: make([]interface{}, 0)},
 	}
 }
 
@@ -59,7 +67,7 @@ func (s *SearchStreamToURLService) Query(query string) *SearchStreamToURLService
 	return s
 }
 
-func (s *SearchStreamToURLService) AddWebhook(webhook *Webhook) *SearchStreamToURLService {
+func (s *SearchStreamToURLService) AddWebhook(webhook interface{}) *SearchStreamToURLService {
 	s.options.Webhooks = append(s.options.Webhooks, webhook)
 	return s
 }

@@ -5,7 +5,7 @@ import (
 )
 
 func TestConnection(t *testing.T) {
-	conn, err := NewConnection("https://scalr.api.appbase.io", "dW9DQYdot", "40d5db8b-36c8-41ac-b6e9-d26d7e34ce1e", "testapp2")
+	conn, err := NewConnection("https://scalr.api.appbase.io", "QEVrcElba", "5c13d943-a5d1-4b05-92f3-42707d49fcbb", "es2test1")
 	if err != nil {
 		t.Error(err)
 		return
