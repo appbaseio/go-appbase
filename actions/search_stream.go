@@ -36,7 +36,12 @@ func NewSearchStreamService(conn *connection.Connection) *SearchStreamService {
 }
 
 func (s *SearchStreamService) Type(_type string) *SearchStreamService {
-	s.options.Type = _type
+	s.options.Type = []string{_type}
+	return s
+}
+
+func (s *SearchStreamService) Types(_types []string) *SearchStreamService {
+	s.options.Type = _types
 	return s
 }
 
@@ -63,7 +68,7 @@ func (s *SearchStreamService) Do() (*SearchStreamResponse, error) {
 	s.options.Params.Del("stream")
 	s.options.Params.Set("streamonly", "true")
 
-	responseDecoder, err := s.conn.PerformRequest("POST", strings.Join([]string{s.options.Type, "_search"}, "/"), s.options.Params, s.options.Body)
+	responseDecoder, err := s.conn.PerformRequest("POST", strings.Join([]string{strings.Join(s.options.Type, ","), "_search"}, "/"), s.options.Params, s.options.Body)
 	if err != nil {
 		return nil, err
 	}

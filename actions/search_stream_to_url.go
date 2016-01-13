@@ -18,7 +18,7 @@ type Webhook struct {
 }
 
 type SearchStreamToURLOptions struct {
-	Type     string           `json:"type" validate:"required"`
+	Type     []string         `json:"type" validate:"required"`
 	Webhooks []interface{}    `json:"webhooks" validate:"required"`
 	Query    *json.RawMessage `json:"query" validate:"required"`
 	query    string
@@ -58,7 +58,12 @@ func NewSearchStreamToURLService(conn *connection.Connection) *SearchStreamToURL
 }
 
 func (s *SearchStreamToURLService) Type(_type string) *SearchStreamToURLService {
-	s.options.Type = _type
+	s.options.Type = []string{_type}
+	return s
+}
+
+func (s *SearchStreamToURLService) Types(_types []string) *SearchStreamToURLService {
+	s.options.Type = _types
 	return s
 }
 
@@ -93,7 +98,7 @@ func (s *SearchStreamToURLService) Do() (*SearchStreamToURLResponse, error) {
 	h1, h2 := murmur3.Sum128([]byte(s.options.query))
 	id := fmt.Sprintf("%x%x", h1, h2)
 
-	path := strings.Join([]string{".percolator/webhooks", s.options.Type, id}, "-0-")
+	path := strings.Join([]string{".percolator/webhooks", strings.Join(s.options.Type, ","), id}, "-0-")
 
 	responseDecoder, err := s.conn.PerformRequest("POST", path, nil, string(body))
 	if err != nil {

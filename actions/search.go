@@ -88,8 +88,8 @@ type SearchSuggestionOption struct {
 type SearchHitHighlight map[string][]string
 
 type SearchServiceOptions struct {
-	Type   string `validate:"required"`
-	Body   string `validate:"required"`
+	Type   []string `validate:"required"`
+	Body   string   `validate:"required"`
 	Params url.Values
 }
 
@@ -106,7 +106,12 @@ func NewSearchService(conn *connection.Connection) *SearchService {
 }
 
 func (s *SearchService) Type(_type string) *SearchService {
-	s.options.Type = _type
+	s.options.Type = []string{_type}
+	return s
+}
+
+func (s *SearchService) Types(_types []string) *SearchService {
+	s.options.Type = _types
 	return s
 }
 
@@ -126,7 +131,7 @@ func (s *SearchService) Do() (*SearchResponse, error) {
 		return nil, err
 	}
 
-	responseDecoder, err := s.conn.PerformRequest("POST", strings.Join([]string{s.options.Type, "_search"}, "/"), s.options.Params, s.options.Body)
+	responseDecoder, err := s.conn.PerformRequest("POST", strings.Join([]string{strings.Join(s.options.Type, ","), "_search"}, "/"), s.options.Params, s.options.Body)
 	if err != nil {
 		return nil, err
 	}

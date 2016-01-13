@@ -18,9 +18,13 @@ func validate(obj interface{}) error {
 					emptyFields = append(emptyFields, field.Name)
 				}
 				for j := 0; j < slice.Len(); j++ {
-					err := validate(slice.Index(j).Interface())
-					if err != nil {
-						return err
+					if slice.Index(j).Kind() == reflect.Ptr {
+						err := validate(slice.Index(j).Interface())
+						if err != nil {
+							return err
+						}
+					} else if slice.Index(j).Interface() == reflect.Zero(slice.Index(j).Type()).Interface() {
+						emptyFields = append(emptyFields, field.Name)
 					}
 				}
 			} else if reflect.ValueOf(obj).Elem().FieldByIndex([]int{i}).Interface() == reflect.Zero(field.Type).Interface() {
