@@ -1,16 +1,15 @@
-package examples
+package appbase
 
 import (
 	"fmt"
-	"github.com/appbaseio/go-appbase"
 	"log"
 )
 
-var client *appbase.Client
-
 func Example() {
 
-	client, _ = appbase.NewClient("https://scalr.api.appbase.io", "mj8IvN7DY", "c01fd88a-250e-4321-85bf-51574d5141dc", "go-test")
+	// Importing the library as 'github.com/appbase/go-appbase'.
+	// Then instantiate the client with appbase.NewClient(url, username, password, appname).
+	client, _ = NewClient("https://scalr.api.appbase.io", "mj8IvN7DY", "c01fd88a-250e-4321-85bf-51574d5141dc", "go-test")
 
 	err := client.Ping()
 	if err != nil {
@@ -92,12 +91,15 @@ func ExampleClient_SearchStream() {
 }
 
 func ExampleClient_SearchStreamToURL() {
-	const testtype string = "tweet"
-	const matchAllQuery string = `{"query":{"match_all":{}}}`
-	webhook := appbase.NewWebhook()
+	// Similar to NewClient, we will instiate a webhook instance with appbase.NewWebhook()
+	webhook := NewWebhook()
+	// Webhook instancess need to have a URL, method and body (which can be string or a JSON object)
 	webhook.URL = "https://www.mockbin.org/bin/cd6461ab-468f-42f5-865f-4eed22daae95"
 	webhook.Method = "POST"
 	webhook.Body = "hellowebhooks"
+	const testtype string = "tweet"
+	const matchAllQuery string = `{"query":{"match_all":{}}}`
+
 	searchStreamToURLResponse, err := client.SearchStreamToURL().Type(testtype).Query(matchAllQuery).AddWebhook(webhook).Do()
 	if err != nil {
 		log.Fatalln(err)
