@@ -49,11 +49,11 @@ func (i *IndexService) Body(body string) *IndexService {
 	return i
 }
 
-func (i *IndexService) URLParams(params url.Values) *IndexService {
+func (i *IndexService) Pretty() *IndexService {
 	params := url.Values{}
 	params.Set("pretty", "true")
 	i.options.Params = params
-	return s
+	return i
 }
 
 func (i *IndexService) URLParams(params url.Values) *IndexService {

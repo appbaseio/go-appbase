@@ -50,7 +50,7 @@ func (s *SearchStreamService) Body(body string) *SearchStreamService {
 	return s
 }
 
-func (s *SearchStreamService) URLParams(params url.Values) *SearchStreamService {
+func (s *SearchStreamService) Pretty() *SearchStreamService {
 	params := url.Values{}
 	params.Set("pretty", "true")
 	s.options.Params = params

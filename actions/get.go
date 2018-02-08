@@ -47,11 +47,11 @@ func (g *GetService) Id(_id string) *GetService {
 	return g
 }
 
-func (g *GetService) URLParams(params url.Values) *GetService {
+func (g *GetService) Pretty() *GetService {
 	params := url.Values{}
 	params.Set("pretty", "true")
 	g.options.Params = params
-	return s
+	return g
 }
 
 func (g *GetService) URLParams(params url.Values) *GetService {

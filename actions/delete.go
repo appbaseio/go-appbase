@@ -43,11 +43,11 @@ func (d *DeleteService) Id(_id string) *DeleteService {
 	return d
 }
 
-func (d *DeleteService) URLParams(params url.Values) *DeleteService {
+func (d *DeleteService) Pretty() *DeleteService {
 	params := url.Values{}
 	params.Set("pretty", "true")
 	d.options.Params = params
-	return s
+	return d
 }
 
 func (d *DeleteService) URLParams(params url.Values) *DeleteService {

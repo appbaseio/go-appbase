@@ -39,4 +39,70 @@ func TestAppbase(t *testing.T) {
 		t.Error("Document not found")
 		return
 	}
+
+	// Test Pretty()
+	_, err = client.Index().Type(testtype).Id("2").Body(tweet1).Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.Get().Type(testtype).Id("2").Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.Get().Type(testtype).Id("2").Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.GetStream().Type(testtype).Id("2").Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.GetStream().Type(testtype).Id("2").Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.Update().Type(testtype).Id("2").Body(tweet2).Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.Update().Type(testtype).Id("2").Body(tweet1).Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.SearchStream().SearchService.Type(testtype).Body(query1).Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	_, err = client.SearchStream().SearchService.Type(testtype).Body(query1).Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	resPretty, err := client.Delete().Type(testtype).Id("2").Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if !resPretty.Found {
+		t.Error("Document not found")
+		return
+	}
+
 }
