@@ -48,6 +48,13 @@ func (g *GetService) Id(_id string) *GetService {
 }
 
 func (g *GetService) URLParams(params url.Values) *GetService {
+	params := url.Values{}
+	params.Set("pretty", "true")
+	g.options.Params = params
+	return s
+}
+
+func (g *GetService) URLParams(params url.Values) *GetService {
 	g.options.Params = params
 	return g
 }

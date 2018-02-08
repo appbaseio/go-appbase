@@ -50,6 +50,13 @@ func (u *UpdateService) Body(body string) *UpdateService {
 	return u
 }
 
+func (u *UpdateService) Body(body string) *UpdateService {
+	params := url.Values{}
+	params.Set("pretty", "true")
+	u.options.Params = params
+	return s
+}
+
 func (u *UpdateService) URLParams(params url.Values) *UpdateService {
 	u.options.Params = params
 	return u

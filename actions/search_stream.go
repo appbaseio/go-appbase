@@ -51,6 +51,13 @@ func (s *SearchStreamService) Body(body string) *SearchStreamService {
 }
 
 func (s *SearchStreamService) URLParams(params url.Values) *SearchStreamService {
+	params := url.Values{}
+	params.Set("pretty", "true")
+	s.options.Params = params
+	return s
+}
+
+func (s *SearchStreamService) URLParams(params url.Values) *SearchStreamService {
 	s.options.Params = params
 	return s
 }

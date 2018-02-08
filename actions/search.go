@@ -120,6 +120,13 @@ func (s *SearchService) Body(body string) *SearchService {
 	return s
 }
 
+func (s *SearchService) Pretty() *SearchService {
+	params := url.Values{}
+	params.Set("pretty", "true")
+	s.options.Params = params
+	return s
+}
+
 func (s *SearchService) URLParams(params url.Values) *SearchService {
 	s.options.Params = params
 	return s

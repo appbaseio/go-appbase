@@ -46,6 +46,13 @@ func (g *GetStreamService) Id(_id string) *GetStreamService {
 }
 
 func (g *GetStreamService) URLParams(params url.Values) *GetStreamService {
+	params := url.Values{}
+	params.Set("pretty", "true")
+	g.options.Params = params
+	return s
+}
+
+func (g *GetStreamService) URLParams(params url.Values) *GetStreamService {
 	g.options.Params = params
 	return g
 }
