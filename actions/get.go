@@ -48,14 +48,23 @@ func (g *GetService) Id(_id string) *GetService {
 }
 
 func (g *GetService) Pretty() *GetService {
-	params := url.Values{}
-	params.Set("pretty", "true")
-	g.options.Params = params
+	if g.options.Params != nil {
+		g.options.Params.Set("pretty", "true")
+	} else {
+		params := url.Values{}
+		params.Set("pretty", "true")
+		g.options.Params = params
+	}
 	return g
 }
 
 func (g *GetService) URLParams(params url.Values) *GetService {
-	g.options.Params = params
+	if g.options.Params.Get("pretty") == "true" {
+		g.options.Params = params
+		g.options.Params.Set("pretty", "true")
+	} else {
+		g.options.Params = params
+	}
 	return g
 }
 

@@ -2,6 +2,7 @@ package appbase
 
 import (
 	"fmt"
+	"net/url"
 	"testing"
 )
 
@@ -54,24 +55,26 @@ func TestAppbase(t *testing.T) {
 	/*
 		No documents are returned, hence nothing gets pretty printed
 		Output:
+		Index() Response with Pretty():
 		{go-appbase-tests tweet 1 1 true}
 	*/
 
-	response, err := client.Get().Type(testtype).Id("1").Pretty().Do()
+	responseGet, err := client.Get().Type(testtype).Id("1").Pretty().Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
 	fmt.Println("Get() Response with Pretty()")
-	fmt.Println(string(*response.Source))
+	fmt.Println(string(*responseGet.Source))
 	/* Output:
+	Get() Response with Pretty()
 	{
 		"user" : "sacheendra",
 		"message" : "I am a robot."
 	}
 	*/
 
-	responseGet, err := client.Get().Type(testtype).Id("1").Do()
+	responseGet, err = client.Get().Type(testtype).Id("1").Do()
 	if err != nil {
 		t.Error(err)
 		return
@@ -80,6 +83,7 @@ func TestAppbase(t *testing.T) {
 	fmt.Println(string(*responseGet.Source))
 	/*
 		Output:
+		Get() Response without Pretty()
 		{"user":"sacheendra","message":"I am a robot."}
 	*/
 
@@ -95,6 +99,7 @@ func TestAppbase(t *testing.T) {
 
 	/*
 		Output:
+		GetStream() Response with Pretty()
 		{
 			"user" : "sacheendra",
 			"message" : "I am a robot"
@@ -111,6 +116,7 @@ func TestAppbase(t *testing.T) {
 
 	/*
 		Output:
+		Search() Response with Pretty()
 		{
 			"user" : "sacheendra",
 			"message" : "I am a robot"
@@ -127,6 +133,7 @@ func TestAppbase(t *testing.T) {
 
 	/*
 		Output:
+		Search() Response without Pretty()
 		{"user" : "sacheendra","message" : "I am a robot"}
 	*/
 
@@ -146,6 +153,23 @@ func TestAppbase(t *testing.T) {
 
 	/*
 		Output:
+		SearchStream() Response with Pretty()
+		{
+			"user" : "sacheendra",
+			"message" : "I am not a robot"
+		}
+	*/
+
+	param := url.Values{}
+	param.Set("fields", "_source")
+
+	updateResponse, _ := client.Update().Type(testtype).Id("3").Body(fmt.Sprintf(`{ "doc": %s }`, tweet2)).Pretty().URLParams(param).Do()
+	fmt.Println("Update() Response with Pretty()")
+	fmt.Println(string(*updateResponse.GetResponse.Source))
+
+	/*
+		Output:
+		Update() Response with Pretty()
 		{
 			"user" : "sacheendra",
 			"message" : "I am not a robot"
@@ -167,6 +191,7 @@ func TestAppbase(t *testing.T) {
 	/*
 		No Documents are returned hence nothing gets pretty printed.
 		Output:
+		Delete() Response with Pretty()
 		{go-appbase-tests tweet 2 7 true}
 	*/
 

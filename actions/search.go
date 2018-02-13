@@ -121,14 +121,24 @@ func (s *SearchService) Body(body string) *SearchService {
 }
 
 func (s *SearchService) Pretty() *SearchService {
-	params := url.Values{}
-	params.Set("pretty", "true")
-	s.options.Params = params
+	if s.options.Params != nil {
+		s.options.Params.Set("pretty", "true")
+	} else {
+		params := url.Values{}
+		params.Set("pretty", "true")
+		s.options.Params = params
+	}
 	return s
 }
 
 func (s *SearchService) URLParams(params url.Values) *SearchService {
-	s.options.Params = params
+	if s.options.Params.Get("pretty") == "true" {
+		s.options.Params = params
+		s.options.Params.Set("pretty", "true")
+	} else {
+		s.options.Params = params
+	}
+
 	return s
 }
 

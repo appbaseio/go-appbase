@@ -44,14 +44,23 @@ func (d *DeleteService) Id(_id string) *DeleteService {
 }
 
 func (d *DeleteService) Pretty() *DeleteService {
-	params := url.Values{}
-	params.Set("pretty", "true")
-	d.options.Params = params
+	if d.options.Params != nil {
+		d.options.Params.Set("pretty", "true")
+	} else {
+		params := url.Values{}
+		params.Set("pretty", "true")
+		d.options.Params = params
+	}
 	return d
 }
 
 func (d *DeleteService) URLParams(params url.Values) *DeleteService {
-	d.options.Params = params
+	if d.options.Params.Get("pretty") == "true" {
+		d.options.Params = params
+		d.options.Params.Set("pretty", "true")
+	} else {
+		d.options.Params = params
+	}
 	return d
 }
 

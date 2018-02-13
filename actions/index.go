@@ -50,14 +50,23 @@ func (i *IndexService) Body(body string) *IndexService {
 }
 
 func (i *IndexService) Pretty() *IndexService {
-	params := url.Values{}
-	params.Set("pretty", "true")
-	i.options.Params = params
+	if i.options.Params != nil {
+		i.options.Params.Set("pretty", "true")
+	} else {
+		params := url.Values{}
+		params.Set("pretty", "true")
+		i.options.Params = params
+	}
 	return i
 }
 
 func (i *IndexService) URLParams(params url.Values) *IndexService {
-	i.options.Params = params
+	if i.options.Params.Get("pretty") == "true" {
+		i.options.Params = params
+		i.options.Params.Set("pretty", "true")
+	} else {
+		i.options.Params = params
+	}
 	return i
 }
 

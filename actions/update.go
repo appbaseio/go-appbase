@@ -51,14 +51,24 @@ func (u *UpdateService) Body(body string) *UpdateService {
 }
 
 func (u *UpdateService) Pretty() *UpdateService {
-	params := url.Values{}
-	params.Set("pretty", "true")
-	u.options.Params = params
+	if u.options.Params != nil {
+		u.options.Params.Set("pretty", "true")
+	} else {
+		params := url.Values{}
+		params.Set("pretty", "true")
+		u.options.Params = params
+	}
 	return u
 }
 
 func (u *UpdateService) URLParams(params url.Values) *UpdateService {
-	u.options.Params = params
+	if u.options.Params.Get("pretty") == "true" {
+		u.options.Params = params
+		u.options.Params.Set("pretty", "true")
+	} else {
+		u.options.Params = params
+	}
+
 	return u
 }
 
