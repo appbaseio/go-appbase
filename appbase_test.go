@@ -1,15 +1,16 @@
 package appbase
 
 import (
+	"fmt"
 	"testing"
 )
 
 const URL string = "https://scalr.api.appbase.io"
-const username string = "QEVrcElba"
-const password string = "5c13d943-a5d1-4b05-92f3-42707d49fcbb"
-const appname string = "es2test1"
+const username string = "HnnFbzaRq"
+const password string = "5d2ba0c3-4689-46f7-8cc9-60473479dc71"
+const appname string = "go-appbase-tests"
 
-const testtype string = "tweet2"
+const testtype string = "tweet"
 const tweet1 string = `{"user":"sacheendra","message":"I am a robot."}`
 const tweet2 string = `{"user":"sacheendra","message":"I am not a robot."}`
 const query1 string = `{"query":{"match_all":{}}}`
@@ -41,68 +42,132 @@ func TestAppbase(t *testing.T) {
 	}
 
 	// Test Pretty()
-	_, err = client.Index().Type(testtype).Id("2").Body(tweet1).Pretty().Do()
-	if err != nil {
-		t.Error(err)
-		return
-	}
 
-	_, err = client.Get().Type(testtype).Id("2").Pretty().Do()
+	indexResponse, err := client.Index().Type(testtype).Id("1").Body(tweet1).Pretty().Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	fmt.Println("Index() Response with Pretty():")
+	fmt.Println(*indexResponse)
 
-	_, err = client.Get().Type(testtype).Id("2").Do()
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	/*
+		No documents are returned, hence nothing gets pretty printed
+		Output:
+		{go-appbase-tests tweet 1 1 true}
+	*/
 
-	_, err = client.GetStream().Type(testtype).Id("2").Pretty().Do()
+	response, err := client.Get().Type(testtype).Id("1").Pretty().Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	fmt.Println("Get() Response with Pretty()")
+	fmt.Println(string(*response.Source))
+	/* Output:
+	{
+		"user" : "sacheendra",
+		"message" : "I am a robot."
+	}
+	*/
 
-	_, err = client.GetStream().Type(testtype).Id("2").Do()
+	responseGet, err := client.Get().Type(testtype).Id("1").Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	fmt.Println("Get() Response without Pretty()")
+	fmt.Println(string(*responseGet.Source))
+	/*
+		Output:
+		{"user":"sacheendra","message":"I am a robot."}
+	*/
 
-	_, err = client.Update().Type(testtype).Id("2").Body(tweet2).Do()
+	getStreamer, _ := client.GetStream().GetService.Type(testtype).Id("1").Pretty().Do()
+	_, err = client.Index().Type(testtype).Id("2").Body(tweet2).Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	getStreamResponse := *getStreamer.Source
+	fmt.Println("GetStream() Response with Pretty()")
+	fmt.Println(string(getStreamResponse))
 
-	_, err = client.Update().Type(testtype).Id("2").Body(tweet1).Pretty().Do()
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	/*
+		Output:
+		{
+			"user" : "sacheendra",
+			"message" : "I am a robot"
+		}
+	*/
 
-	_, err = client.SearchStream().SearchService.Type(testtype).Body(query1).Do()
+	searchResponse, err := client.Search().Type(testtype).Body(query1).Pretty().Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
+	fmt.Println("Search() Response with Pretty()")
+	fmt.Println(string(*searchResponse.Hits.Hits[0].Source))
 
-	_, err = client.SearchStream().SearchService.Type(testtype).Body(query1).Pretty().Do()
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	/*
+		Output:
+		{
+			"user" : "sacheendra",
+			"message" : "I am a robot"
+		}
+	*/
 
-	resPretty, err := client.Delete().Type(testtype).Id("2").Pretty().Do()
+	searchResponse, err = client.Search().Type(testtype).Body(query1).Do()
 	if err != nil {
 		t.Error(err)
 		return
 	}
-	if !resPretty.Found {
+	fmt.Println("Search() Response without Pretty()")
+	fmt.Println(string(*searchResponse.Hits.Hits[0].Source))
+
+	/*
+		Output:
+		{"user" : "sacheendra","message" : "I am a robot"}
+	*/
+
+	searchStreamResponse, err := client.SearchStream().SearchService.Type(testtype).Body(query1).Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	_, err = client.Index().Type(testtype).Id("2").Body(tweet2).Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	docResponse := *searchStreamResponse.Hits.Hits[0].Source
+	fmt.Println("SearchStream() Response with Pretty()")
+	fmt.Println(string(docResponse))
+
+	/*
+		Output:
+		{
+			"user" : "sacheendra",
+			"message" : "I am not a robot"
+		}
+	*/
+
+	deleteResponse, err := client.Delete().Type(testtype).Id("2").Pretty().Do()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if !deleteResponse.Found {
 		t.Error("Document not found")
 		return
 	}
+	fmt.Println("Delete() Response with Pretty()")
+	fmt.Println(*deleteResponse)
+
+	/*
+		No Documents are returned hence nothing gets pretty printed.
+		Output:
+		{go-appbase-tests tweet 2 7 true}
+	*/
 
 }
