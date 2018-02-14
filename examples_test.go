@@ -9,7 +9,7 @@ func Example() {
 
 	// Importing the library as 'github.com/appbase/go-appbase'.
 	// Then instantiate the client with appbase.NewClient(url, username, password, appname).
-	client, _ = NewClient("https://scalr.api.appbase.io", "mj8IvN7DY", "c01fd88a-250e-4321-85bf-51574d5141dc", "go-test")
+	client, _ = NewClient("https://scalr.api.appbase.io", "HnnFbzaRq", "5d2ba0c3-4689-46f7-8cc9-60473479dc71", "go-appbase-tests")
 
 	err := client.Ping()
 	if err != nil {
