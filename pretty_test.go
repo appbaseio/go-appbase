@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-/*
+/* defined in appbase_test.go
 const URL string = "https://scalr.api.appbase.io"
 const username string = "HnnFbzaRq"
 const password string = "5d2ba0c3-4689-46f7-8cc9-60473479dc71"
@@ -43,11 +43,11 @@ func TestPretty(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	valu := compareResult(*responseGet.Source, *responseGet2.Source)
-	if !valu {
+	value := compareResult(*responseGet.Source, *responseGet2.Source)
+	if !value {
 		t.Error("Pretty() does not return matching result")
 	}
-	t.Log("Get: Test Passed = ", valu)
+	t.Log("Get: Test Passed = ", value)
 
 	//Running test for GetStream()
 	t.Log("Initialising test for GetStream() with Pretty()")
@@ -65,11 +65,11 @@ func TestPretty(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	valu = compareResult(*getStreamer.Source, *getStreamer2.Source)
-	if !valu {
+	value = compareResult(*getStreamer.Source, *getStreamer2.Source)
+	if !value {
 		t.Error("Pretty() does not return matching result")
 	}
-	t.Log("GetStream: Test Passed = ", valu)
+	t.Log("GetStream: Test Passed = ", value)
 
 	//Initialising test for Search()
 	t.Log("Initialising test for Search() with Pretty()")
@@ -84,11 +84,11 @@ func TestPretty(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	valu = compareResult(*searchResponse.Hits.Hits[0].Source, *searchResponse2.Hits.Hits[0].Source)
-	if !valu {
+	value = compareResult(*searchResponse.Hits.Hits[0].Source, *searchResponse2.Hits.Hits[0].Source)
+	if !value {
 		t.Error("Pretty() does not return matching result")
 	}
-	t.Log("Search: Test Passed = ", valu)
+	t.Log("Search: Test Passed = ", value)
 
 	//Initialising test for SearchStream()
 	t.Log("Initialising test for SearchStream() with Pretty()")
@@ -114,15 +114,15 @@ func TestPretty(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	valu = compareResult(*searchStreamResponse.Hits.Hits[0].Source, *searchStreamResponse2.Hits.Hits[0].Source)
-	if !valu {
+	value = compareResult(*searchStreamResponse.Hits.Hits[0].Source, *searchStreamResponse2.Hits.Hits[0].Source)
+	if !value {
 		t.Error("Pretty() does not return matching result")
 	}
-	t.Log("SearchStream: Test Passed = ", valu)
+	t.Log("SearchStream: Test Passed = ", value)
 
 	//Initialising test for Update()
 	t.Log("Initialising test for Update() with Pretty()")
-	param := url.Values{}
+	param := url.values{}
 	param.Set("fields", "_source")
 
 	updateResponse, _ := client.Update().Type(testtype).Id("3").Body(fmt.Sprintf(`{ "doc": %s }`, tweet2)).Pretty().URLParams(param).Do()
@@ -130,11 +130,11 @@ func TestPretty(t *testing.T) {
 	t.Log("Initialising test for Update() without Pretty()")
 	updateResponse2, _ := client.Update().Type(testtype).Id("3").Body(fmt.Sprintf(`{ "doc": %s }`, tweet2)).URLParams(param).Do()
 
-	valu = compareResult(*updateResponse.GetResponse.Source, *updateResponse2.GetResponse.Source)
-	if !valu {
+	value = compareResult(*updateResponse.GetResponse.Source, *updateResponse2.GetResponse.Source)
+	if !value {
 		t.Error("Pretty() does not return matching result")
 	}
-	t.Log("SearchStream: Test Passed = ", valu)
+	t.Log("SearchStream: Test Passed = ", value)
 }
 func compareResult(pretty json.RawMessage, nonPretty json.RawMessage) bool {
 	prettyResponse := string(pretty)
