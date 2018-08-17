@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/appbaseio/go-appbase/Godeps/_workspace/src/github.com/spaolacci/murmur3"
+	"github.com/spaolacci/murmur3"
 	"github.com/appbaseio/go-appbase/connection"
 )
 
